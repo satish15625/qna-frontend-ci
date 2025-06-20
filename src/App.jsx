@@ -8,10 +8,10 @@ const App = () => {
 
   useEffect(() => {
     if (!chatId) {
-      // Only generate ID but don't store in history yet
       const newId = Date.now().toString();
       setChatId(newId);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const startNewChat = () => {
