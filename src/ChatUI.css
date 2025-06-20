@@ -1,0 +1,148 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+}
+
+.sidebar {
+  width: 220px;
+  background: #f8f8f8;
+  padding: 1rem;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.sidebar button {
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.sidebar button:hover {
+  background: #ddd;
+}
+
+.chat-container {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.new-chat-btn {
+  padding: 6px 12px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-chat-btn:hover {
+  background: #388e3c;
+}
+
+.chat-box {
+  flex: 1;
+  margin-top: 1rem;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: #fefefe;
+  border-radius: 6px;
+}
+
+.message {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 8px;
+}
+
+.message.user {
+  background-color: #d1e7dd;
+  align-self: flex-end;
+}
+
+.message.bot {
+  background-color: #e2e3e5;
+  align-self: flex-start;
+}
+
+.message.loading {
+  font-style: italic;
+}
+
+.chat-form {
+  display: flex;
+  margin-top: 1rem;
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+}
+
+.chat-form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: #007bff;
+  color: white;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+
+.chat-form button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+}
+
+.model-select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+
+
+
+
+
+
+
+.rename-input {
+  font-size: 14px;
+  padding: 6px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 140px;
+}
+
+
+
+
