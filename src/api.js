@@ -22,7 +22,7 @@ export const askQuestion = async (question) => {
     const body = JSON.stringify({ query: question });  // ✅ FIXED KEY
     console.log("Sending:", body);
 
-    const response = await fetch("https://09f3-106-219-153-31.ngrok-free.app/query/", {
+    const response = await fetch("http://192.168.1.3:8000/query/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
