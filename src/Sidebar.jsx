@@ -1,109 +1,95 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
 
-const Sidebar = ({ onSelectChat, onNewChat }) => {
+const Sidebar = ({ onSelectChat, selectedChatId }) => {
   const [chatList, setChatList] = useState([]);
-  const [activeMenuId, setActiveMenuId] = useState(null);
-  const [renamingId, setRenamingId] = useState(null);
-  const [renameText, setRenameText] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [activeChatId, setActiveChatId] = useState(null);
 
   useEffect(() => {
+    const loadChats = () => {
+      const index = JSON.parse(localStorage.getItem("chat_index")) || [];
+      setChatList(index);
+    };
     loadChats();
     window.addEventListener("storage", loadChats);
     return () => window.removeEventListener("storage", loadChats);
   }, []);
 
-  const loadChats = () => {
-    const index = JSON.parse(localStorage.getItem("chat_index")) || [];
-    setChatList(index);
+  const startNewChat = () => {
+    const newId = Date.now().toString();
+    onSelectChat(newId);
   };
 
-  const deleteChat = (chatId) => {
-    localStorage.removeItem(`chat_${chatId}`);
-    const updated = chatList.filter((chat) => chat.id !== chatId);
-    localStorage.setItem("chat_index", JSON.stringify(updated));
-    setChatList(updated);
-    window.dispatchEvent(new Event("storage"));
+  const openModal = (e, chatId) => {
+    e.stopPropagation();
+    setActiveChatId(chatId);
+    setModalVisible(true);
   };
 
-  const handleRenameSubmit = (e, chatId) => {
-    e.preventDefault();
-    if (!renameText.trim()) return;
-    const updated = chatList.map((chat) =>
-      chat.id === chatId ? { ...chat, title: renameText } : chat
-    );
-    localStorage.setItem("chat_index", JSON.stringify(updated));
-    setChatList(updated);
-    setRenamingId(null);
-    setRenameText("");
-    setActiveMenuId(null);
-    window.dispatchEvent(new Event("storage"));
+  const closeModal = () => {
+    setModalVisible(false);
+    setActiveChatId(null);
   };
 
-  const toggleMenu = (chatId) => {
-    setActiveMenuId(activeMenuId === chatId ? null : chatId);
-    setRenamingId(null);
+  const handleRename = () => {
+    const newTitle = prompt("Enter new title:");
+    if (newTitle) {
+      const updated = chatList.map(chat => chat.id === activeChatId ? { ...chat, title: newTitle } : chat);
+      setChatList(updated);
+      localStorage.setItem("chat_index", JSON.stringify(updated));
+    }
+    closeModal();
   };
 
-  const handleNewChat = () => {
-    if (onNewChat) onNewChat(); // callback to parent to reset chat
+  const handleDelete = () => {
+    const confirmDelete = window.confirm("Delete this chat?");
+    if (confirmDelete) {
+      const updated = chatList.filter(chat => chat.id !== activeChatId);
+      setChatList(updated);
+      localStorage.setItem("chat_index", JSON.stringify(updated));
+      localStorage.removeItem(`chat_${activeChatId}`);
+    }
+    closeModal();
+  };
+
+  const handleShare = () => {
+    alert("Share link copied to clipboard: /chat?id=" + activeChatId);
+    closeModal();
   };
 
   return (
     <div className="sidebar">
-      <div className="new-chat-section">
-        <button className="new-chat-button" onClick={handleNewChat}>
-          ➕ New Chat
-        </button>
+      <div className="sidebar-header">
+        <h2>🤖 ChatBot</h2>
+        <button className="sidebar-new-btn colorful" onClick={startNewChat}>➕ New Chat</button>
       </div>
-      <h3>📚 History</h3>
-      {chatList.length === 0 ? (
-        <p className="no-history">No chat history</p>
-      ) : (
-        chatList.map(({ id, title }) => (
-          <div key={id} className="sidebar-item">
-            {renamingId === id ? (
-              <form onSubmit={(e) => handleRenameSubmit(e, id)} className="rename-form">
-                <input
-                  autoFocus
-                  value={renameText}
-                  onChange={(e) => setRenameText(e.target.value)}
-                  onBlur={(e) => handleRenameSubmit(e, id)}
-                  className="rename-input"
-                />
-              </form>
-            ) : (
-              <button className="chat-button" onClick={() => onSelectChat(id)} title={title}>
-                {title}
-              </button>
-            )}
-            <div className="menu-wrapper">
-              <button className="menu-button" onClick={() => toggleMenu(id)}>⋮</button>
-              {activeMenuId === id && (
-                <div className="dropdown-menu">
-                  <div
-                    className="dropdown-item"
-                    onClick={() => {
-                      setRenamingId(id);
-                      setRenameText(title);
-                    }}
-                  >
-                    📝 Rename
-                  </div>
-                  <div className="dropdown-item" onClick={() => alert("📤 Share is coming soon!")}>
-                    📤 Share
-                  </div>
-                  <div className="dropdown-item" onClick={() => alert("🗃️ Archive is coming soon!")}>
-                    🗃️ Archive
-                  </div>
-                  <div className="dropdown-item delete" onClick={() => deleteChat(id)}>
-                    🗑️ Delete
-                  </div>
-                </div>
-              )}
-            </div>
+
+      <h3 className="chat-history-heading">🕘 Chat History</h3>
+      <div className="chat-history">
+        {chatList.map((chat) => (
+          <div
+            key={chat.id}
+            className={`chat-item ${chat.id === selectedChatId ? "active" : ""}`}
+            onClick={() => onSelectChat(chat.id)}
+          >
+            <span className="chat-icon">💬</span>
+            <p className="chat-title">{chat.title || "Untitled Chat"}</p>
+            <p className="" onClick={(e) => openModal(e, chat.id)}>⋯</p>
           </div>
-        ))
+        ))}
+      </div>
+
+      {modalVisible && (
+        <div className="chat-modal-overlay" onClick={closeModal}>
+          <div className="chat-modal" onClick={(e) => e.stopPropagation()}>
+            <h4>Chat Options</h4>
+            <button onClick={handleShare}>🔗 Share</button>
+            <button onClick={handleRename}>✏️ Rename</button>
+            <button onClick={handleDelete}>🗑️ Delete</button>
+            <button onClick={closeModal}>Cancel</button>
+          </div>
+        </div>
       )}
     </div>
   );

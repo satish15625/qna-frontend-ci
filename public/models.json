@@ -1,6 +1,7 @@
-[
-  "mistral",
-  "llama3",
-  "phi3",
-  "codellama"
-]
+{
+  "models": [
+    { "id": "deepseek-r1:1.5b", "name": "DeepSeek R1" },
+    { "id": "qwen3:1.7b", "name": "Qwen" },
+    { "id": "gemma3:1b", "name": "Gemma 3" }
+  ]
+}

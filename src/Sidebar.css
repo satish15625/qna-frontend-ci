@@ -120,3 +120,75 @@
 .new-chat-button:hover {
   background-color: #f0f0f0;
 }
+
+
+.chat-options-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #888;
+  cursor: pointer;
+}
+
+.chat-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.chat-modal {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.chat-modal h4 {
+  margin-bottom: 0.5rem;
+}
+
+.chat-modal button {
+  padding: 0.5rem 1rem;
+  font-size: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.chat-modal button:hover {
+  background: #efefef;
+}
+
+
+.chat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ensures icon is at end */
+  padding: 10px;
+  background: #f8f9fa;  /* light gray background */
+  border-bottom: 1px solid #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.chat-history {
+  background-color: #f0f2f5;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 0 10px 20px 10px;
+  overflow-y: auto;
+  max-height: calc(100vh - 160px);
+}
+
